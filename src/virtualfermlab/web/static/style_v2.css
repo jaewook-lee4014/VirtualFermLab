@@ -1,0 +1,557 @@
+/* VirtualFermLab Web UI Styles — v2 (Preprint-v1 gradient palette) */
+
+body {
+    background-color: #f0f2f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ================================================================
+   Navbar — v2: taller, bolder
+   ================================================================ */
+.navbar {
+    padding: 1rem 1.5rem;
+}
+
+/* ================================================================
+   Wizard step indicators — v2: stepper with connectors
+   ================================================================ */
+.wizard-steps {
+    padding: 0.8rem 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+}
+
+.wizard-step-indicator {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #6c757d;
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.wizard-step-indicator:hover {
+    background-color: #e9ecef;
+    transform: translateY(-1px);
+}
+
+/* Connector lines between steps */
+.wizard-step-connector {
+    flex: 1;
+    height: 3px;
+    background: #dee2e6;
+    margin: 0 0.3rem;
+    border-radius: 2px;
+    transition: background 0.4s ease;
+}
+
+.wizard-step-connector.completed {
+    background: linear-gradient(90deg, #198754, #20c997);
+}
+
+/* Active: full gradient, white text, glow shadow */
+#ind-1.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 600; box-shadow: 0 4px 15px rgba(102,126,234,0.4); }
+#ind-2.active { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; font-weight: 600; box-shadow: 0 4px 15px rgba(79,172,254,0.4); }
+#ind-3.active { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; font-weight: 600; box-shadow: 0 4px 15px rgba(240,147,251,0.4); }
+#ind-4.active { background: linear-gradient(135deg, #a8e6cf 0%, #3ecd5e 100%); color: white; font-weight: 600; box-shadow: 0 4px 15px rgba(62,205,94,0.4); }
+#ind-5.active { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; font-weight: 600; box-shadow: 0 4px 15px rgba(255,107,107,0.4); }
+
+.wizard-step-indicator.completed {
+    background-color: #198754;
+    color: white;
+}
+
+.step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-right: 0.4rem;
+}
+
+.wizard-step-indicator:not(.active):not(.completed) .step-num {
+    background: #dee2e6;
+    color: #6c757d;
+}
+
+/* ================================================================
+   Step panel transitions (fade-in animation)
+   ================================================================ */
+.wizard-panel {
+    animation: fadeSlideIn 0.35s ease-out;
+}
+
+.wizard-panel.d-none {
+    animation: none;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================================================================
+   Cards — with left accent bar per step
+   ================================================================ */
+.card {
+    border: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid #eee;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 1rem 1.25rem;
+    position: relative;
+}
+
+/* Gradient accent bar on card headers */
+.card-header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+}
+
+#step-1 .card-header::before { background: linear-gradient(180deg, #667eea, #764ba2); }
+#step-2 .card-header::before { background: linear-gradient(180deg, #4facfe, #00f2fe); }
+#step-3 .card-header::before { background: linear-gradient(180deg, #f093fb, #f5576c); }
+#step-4 .card-header::before { background: linear-gradient(180deg, #a8e6cf, #3ecd5e); }
+#step-5 .card-header::before { background: linear-gradient(180deg, #ff6b6b, #ee5a6f); }
+
+.card-header h5 {
+    margin: 0;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding-left: 0.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* ================================================================
+   Hero / intro section (Step 1 top)
+   ================================================================ */
+.step-hero {
+    background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+    border: 1px solid #667eea20;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.step-hero-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.step-hero h6 {
+    margin: 0 0 0.3rem 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.step-hero p {
+    margin: 0;
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* ================================================================
+   Gradient result cards (Step 5)
+   ================================================================ */
+.result-card {
+    padding: 24px;
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.result-card h6 {
+    margin: 0;
+    color: white;
+    font-size: 1rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.result-card .result-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 10px 0;
+    color: white;
+}
+
+.result-card .result-sub {
+    margin: 0;
+    opacity: 0.85;
+    font-size: 0.9rem;
+}
+
+/* Six field-specific gradients */
+.result-card-yield      { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.result-card-mu         { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.result-card-biomass    { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.result-card-substrate  { background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%); }
+.result-card-ph         { background: linear-gradient(135deg, #a8e6cf 0%, #3ecd5e 100%); }
+.result-card-temp       { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); }
+
+/* "No data" card */
+.result-card-empty {
+    padding: 24px;
+    border-radius: 12px;
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    margin-bottom: 15px;
+    color: #6c757d;
+}
+
+.result-card-empty h6,
+.result-card-empty .result-value,
+.result-card-empty .result-sub {
+    color: #6c757d;
+}
+
+/* ================================================================
+   Status badges (extraction quality)
+   ================================================================ */
+.extraction-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin: 0.5rem 0;
+}
+
+.extraction-partial {
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin: 0.5rem 0;
+}
+
+.extraction-failed {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin: 0.5rem 0;
+}
+
+/* ================================================================
+   Strain summary — v2: gradient-accented param cards
+   ================================================================ */
+#strain-summary .param-card {
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+    background: white;
+    transition: box-shadow 0.2s ease;
+}
+
+#strain-summary .param-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+#strain-summary .param-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+}
+
+#strain-summary .param-card:nth-child(1)::before { background: linear-gradient(180deg, #667eea, #764ba2); }
+#strain-summary .param-card:nth-child(2)::before { background: linear-gradient(180deg, #4facfe, #00f2fe); }
+#strain-summary .param-card:nth-child(3)::before { background: linear-gradient(180deg, #f093fb, #f5576c); }
+#strain-summary .param-card:nth-child(4)::before { background: linear-gradient(180deg, #a8e6cf, #3ecd5e); }
+#strain-summary .param-card:nth-child(5)::before { background: linear-gradient(180deg, #ff6b6b, #ee5a6f); }
+#strain-summary .param-card:nth-child(6)::before { background: linear-gradient(180deg, #ffeaa7, #fab1a0); }
+
+#strain-summary .param-card h6 {
+    color: #1f77b4;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding-left: 0.5rem;
+}
+
+#strain-summary .param-card .param-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+#strain-summary .param-card .param-row:nth-child(even) {
+    background: #f8f9fa;
+}
+
+#strain-summary .param-card .param-row .param-name {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+#strain-summary .param-card .param-row .param-value {
+    font-weight: 600;
+    color: #333;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+/* ================================================================
+   Progress bar — gradient
+   ================================================================ */
+.progress {
+    border-radius: 12px;
+    height: 28px;
+    background: #e9ecef;
+}
+
+.progress-bar {
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+/* ================================================================
+   Tables
+   ================================================================ */
+.table-sm {
+    font-size: 0.95rem;
+}
+
+/* ================================================================
+   Form adjustments
+   ================================================================ */
+.form-label {
+    font-size: 1.05rem;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+
+.form-select, .form-control {
+    font-size: 1.05rem;
+    border-radius: 8px;
+    border: 1.5px solid #dee2e6;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
+}
+
+.form-control-sm, .form-select-sm {
+    font-size: 1rem;
+}
+
+.text-muted {
+    font-size: 0.95rem;
+}
+
+.form-label.fw-bold {
+    font-size: 1.15rem;
+}
+
+.form-check-label {
+    font-size: 1.05rem;
+}
+
+.form-check-input {
+    width: 1.15em;
+    height: 1.15em;
+    margin-top: 0.2em;
+}
+
+.form-check-input:checked {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+/* ================================================================
+   Buttons — v2: gradient CTA, larger nav buttons
+   ================================================================ */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    font-size: 1.05rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+}
+
+.btn-outline-primary {
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    border-width: 2px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+}
+
+#btn-run {
+    min-width: 220px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, #a8e6cf 0%, #3ecd5e 100%);
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+#btn-run:hover {
+    box-shadow: 0 6px 20px rgba(62,205,94,0.4);
+    transform: translateY(-2px);
+}
+
+#btn-run:disabled {
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ================================================================
+   Plotly chart containers
+   ================================================================ */
+#trajectory-chart, #mc-dist-chart, #heatmap-chart, #pareto-chart, #mc-envelope-chart {
+    min-height: 420px;
+    border-radius: 10px;
+    background: white;
+    padding: 0.5rem;
+}
+
+/* ================================================================
+   Tabs (Step 5)
+   ================================================================ */
+.nav-tabs .nav-link {
+    font-size: 1.05rem;
+    font-weight: 500;
+    border-radius: 8px 8px 0 0;
+}
+
+.nav-tabs .nav-link.active {
+    color: #667eea;
+    border-color: #dee2e6 #dee2e6 white;
+}
+
+/* ================================================================
+   Discovery pipeline stages
+   ================================================================ */
+.discovery-stages {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.discovery-stage {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: #6c757d;
+    padding: 0.3rem 0;
+    transition: color 0.3s;
+}
+
+.discovery-stage .stage-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    font-size: 0.85rem;
+}
+
+.discovery-stage.stage-running {
+    color: #1f77b4;
+    font-weight: 600;
+}
+
+.discovery-stage.stage-running .stage-icon {
+    animation: disc-spin 1s linear infinite;
+}
+
+.discovery-stage.stage-completed {
+    color: #198754;
+    font-weight: 500;
+}
+
+.discovery-stage.stage-failed {
+    color: #dc3545;
+    font-weight: 500;
+}
+
+@keyframes disc-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ================================================================
+   Export buttons
+   ================================================================ */
+#export-buttons .btn {
+    font-size: 1rem;
+    border-radius: 8px;
+}

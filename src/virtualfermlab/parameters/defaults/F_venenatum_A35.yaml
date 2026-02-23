@@ -1,0 +1,97 @@
+name: F_venenatum_A35
+
+cardinal_pH:
+  pH_min:
+    type: uniform
+    value: 3.5
+    low: 3.0
+    high: 4.0
+    confidence: C
+    source: "Estimated from MPR pH experiment (no growth at pH 4.0)"
+  pH_opt:
+    type: normal
+    value: 6.0
+    std: 0.3
+    confidence: B
+    source: "MPR pH experiment best growth at pH 6.0-6.5"
+  pH_max:
+    type: uniform
+    value: 7.5
+    low: 7.0
+    high: 8.0
+    confidence: C
+    source: "Estimated upper pH limit"
+
+substrates:
+  glucose:
+    name: glucose
+    mu_max:
+      type: normal
+      value: 0.10
+      std: 0.02
+      confidence: B
+      source: "ESCAPE25 calibration (Monod+DI, 1:1 data)"
+    Ks:
+      type: normal
+      value: 0.20
+      std: 0.10
+      confidence: B
+      source: "ESCAPE25 calibration"
+    Yxs:
+      type: normal
+      value: 0.29
+      std: 0.05
+      confidence: B
+      source: "ESCAPE25 calibration Yx1"
+  xylose:
+    name: xylose
+    mu_max:
+      type: normal
+      value: 0.045
+      std: 0.015
+      confidence: B
+      source: "ESCAPE25 calibration (Monod+DI, 1:1 data)"
+    Ks:
+      type: normal
+      value: 0.15
+      std: 0.10
+      confidence: B
+      source: "ESCAPE25 calibration"
+    Yxs:
+      type: normal
+      value: 0.35
+      std: 0.05
+      confidence: B
+      source: "ESCAPE25 calibration Yx2"
+
+inhibitions:
+  - inhibitor: glucose
+    inhibited: xylose
+    K_I:
+      type: normal
+      value: 0.50
+      std: 0.15
+      confidence: B
+      source: "ESCAPE25 calibration K_I"
+    mechanism: direct
+
+enzyme_params:
+  K_Z_c:
+    type: normal
+    value: 0.30
+    std: 0.10
+    confidence: B
+    source: "ESCAPE25 calibration"
+  K_Z_S:
+    type: normal
+    value: 0.20
+    std: 0.10
+    confidence: B
+    source: "ESCAPE25 calibration"
+  K_Z_d:
+    type: uniform
+    value: 0.05
+    low: 0.0
+    high: 0.15
+    confidence: C
+    source: "ESCAPE25 calibration range"

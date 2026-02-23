@@ -1,0 +1,728 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Step indicators -->
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="wizard-steps">
+            <div class="wizard-step-indicator active" id="ind-1" onclick="goToStep(1)">
+                <span class="step-num">1</span> Strain
+            </div>
+            <div class="wizard-step-connector" id="conn-1-2"></div>
+            <div class="wizard-step-indicator" id="ind-2" onclick="goToStep(2)">
+                <span class="step-num">2</span> Model
+            </div>
+            <div class="wizard-step-connector" id="conn-2-3"></div>
+            <div class="wizard-step-indicator" id="ind-3" onclick="goToStep(3)">
+                <span class="step-num">3</span> Condition
+            </div>
+            <div class="wizard-step-connector" id="conn-3-4"></div>
+            <div class="wizard-step-indicator" id="ind-4" onclick="goToStep(4)">
+                <span class="step-num">4</span> Run
+            </div>
+            <div class="wizard-step-connector" id="conn-4-5"></div>
+            <div class="wizard-step-indicator" id="ind-5" onclick="goToStep(5)">
+                <span class="step-num">5</span> Results
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- Step 1: Strain Selection -->
+<!-- ================================================================ -->
+<div class="wizard-panel" id="step-1">
+    <div class="card">
+        <div class="card-header"><h5>Step 1: Strain Selection</h5></div>
+        <div class="card-body">
+            <div class="step-hero">
+                <div class="step-hero-icon">&#129516;</div>
+                <div>
+                    <h6>Choose Your Microbial Strain</h6>
+                    <p>Select a pre-configured strain from the database, or enter any strain name to automatically discover its kinetic parameters from published literature using LLM-powered extraction.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="strain-select" class="form-label">Select Strain</label>
+                    <select class="form-select" id="strain-select">
+                        <option value="">Loading...</option>
+                    </select>
+                    <small class="text-muted">Microbial strain with pre-defined kinetic parameters (&#956;_max, K_s, Y_xs).</small>
+
+                    <!-- Discovery: custom strain input -->
+                    <div class="mt-3">
+                        <label class="form-label">Or enter a new strain</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="strain-input"
+                                   placeholder="e.g. Pichia pastoris GS115">
+                            <button class="btn btn-outline-primary" id="btn-discover" onclick="startDiscovery()">
+                                Discover
+                            </button>
+                        </div>
+                        <small class="text-muted">Enter any strain name. The system will search literature and find similar parameters automatically.</small>
+                    </div>
+
+                    <!-- Discovery progress panel -->
+                    <div id="discovery-panel" class="d-none mt-3">
+                        <div class="card border-info">
+                            <div class="card-body py-2 px-3">
+                                <h6 class="mb-2">Strain Discovery Pipeline</h6>
+                                <div class="discovery-stages">
+                                    <div class="discovery-stage" id="disc-stage-search">
+                                        <span class="stage-icon">&#9711;</span> Paper Search
+                                    </div>
+                                    <div class="discovery-stage" id="disc-stage-extract">
+                                        <span class="stage-icon">&#9711;</span> LLM Extraction
+                                    </div>
+                                    <div class="discovery-stage" id="disc-stage-store">
+                                        <span class="stage-icon">&#9711;</span> Database Storage
+                                    </div>
+                                    <div class="discovery-stage" id="disc-stage-taxonomy">
+                                        <span class="stage-icon">&#9711;</span> Taxonomy Match
+                                    </div>
+                                    <div class="discovery-stage" id="disc-stage-build">
+                                        <span class="stage-icon">&#9711;</span> Build Profile
+                                    </div>
+                                </div>
+                                <div id="discovery-result" class="d-none mt-2 small"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div id="strain-summary" class="mt-2">
+                        <p class="text-muted">Select a strain to view its parameters.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 text-end">
+                <button class="btn btn-primary" id="btn-step1-next" disabled onclick="goToStep(2)">Next &rarr;</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- Step 2: Model Configuration -->
+<!-- ================================================================ -->
+<div class="wizard-panel d-none" id="step-2">
+    <div class="card">
+        <div class="card-header"><h5>Step 2: Model Configuration</h5></div>
+        <div class="card-body">
+            <div class="step-hero" style="background: linear-gradient(135deg, #4facfe10 0%, #00f2fe10 100%); border-color: #4facfe20;">
+                <div class="step-hero-icon">&#9881;&#65039;</div>
+                <div>
+                    <h6>Configure the Mathematical Model</h6>
+                    <p>Choose the growth kinetics (Monod or Contois), substrate switching mechanism, and optional features like cardinal pH response and lag phase modelling.</p>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Growth Model -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Growth Model</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="growth_model" id="gm-monod" value="Monod" checked>
+                        <label class="form-check-label" for="gm-monod">Monod</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="growth_model" id="gm-contois" value="Contois">
+                        <label class="form-check-label" for="gm-contois">Contois</label>
+                    </div>
+                    <small class="text-muted">Monod: &#956; = &#956;_max &middot; S/(K_s+S). Contois: K_s is replaced by K_s&middot;X (density-dependent).</small>
+                </div>
+
+                <!-- Enzyme Mode -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Enzyme Mode</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="enzyme_mode" id="em-direct" value="direct" checked onchange="checkEnzymeCompat()">
+                        <label class="form-check-label" for="em-direct">Direct Inhibition</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="enzyme_mode" id="em-enzyme" value="enzyme" onchange="checkEnzymeCompat()">
+                        <label class="form-check-label" for="em-enzyme">Enzyme Induction</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="enzyme_mode" id="em-kompala" value="kompala" onchange="checkEnzymeCompat()">
+                        <label class="form-check-label" for="em-kompala">Kompala Cybernetic</label>
+                    </div>
+                    <div id="enzyme-warning" class="text-warning small mt-1 d-none"></div>
+                    <small class="text-muted">How substrate switching is modelled. Direct: competitive inhibition. Enzyme/Kompala: enzyme-mediated regulation.</small>
+                </div>
+
+                <!-- Substrates -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Substrates</label>
+                    <div class="mb-2">
+                        <label for="n-substrates" class="form-label">N Substrates</label>
+                        <select class="form-select form-select-sm" id="n-substrates" onchange="syncSubstrateFields()">
+                            <option value="2" selected>2</option>
+                            <option value="1">1</option>
+                        </select>
+                        <small class="text-muted">Number of carbon sources (1 or 2).</small>
+                    </div>
+                </div>
+
+                <!-- Options -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Options</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="use-cardinal-ph" onchange="togglePHFields()">
+                        <label class="form-check-label" for="use-cardinal-ph">Cardinal pH Model</label>
+                    </div>
+                    <small class="text-muted d-block mb-1">Multiply &#956; by a pH growth factor f(pH) based on pH_min, pH_opt, pH_max.</small>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="use-lag" onchange="toggleLagField()">
+                        <label class="form-check-label" for="use-lag">Lag Phase</label>
+                    </div>
+                    <small class="text-muted">Delay growth for a specified duration (cells adapting).</small>
+                </div>
+            </div>
+
+            <!-- Cardinal pH params (hidden by default) -->
+            <div class="row mt-3 d-none" id="ph-fields">
+                <div class="col-md-3">
+                    <label class="form-label">pH_min</label>
+                    <input type="number" class="form-control form-control-sm" id="pH_min" step="0.1" value="3.5">
+                    <small class="text-muted">Minimum pH for growth (below this, growth = 0).</small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">pH_opt</label>
+                    <input type="number" class="form-control form-control-sm" id="pH_opt" step="0.1" value="6.0">
+                    <small class="text-muted">Optimal pH (maximum growth rate).</small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">pH_max</label>
+                    <input type="number" class="form-control form-control-sm" id="pH_max" step="0.1" value="7.5">
+                    <small class="text-muted">Maximum pH for growth (above this, growth = 0).</small>
+                </div>
+            </div>
+
+            <!-- Lag field (hidden by default) -->
+            <div class="row mt-3 d-none" id="lag-field">
+                <div class="col-md-3">
+                    <label class="form-label">Lag Duration (h)</label>
+                    <input type="number" class="form-control form-control-sm" id="lag" step="0.5" value="5.0">
+                    <small class="text-muted">Time before exponential growth begins.</small>
+                </div>
+            </div>
+
+            <div class="mt-3 d-flex justify-content-between">
+                <button class="btn btn-secondary" onclick="goToStep(1)">&larr; Back</button>
+                <button class="btn btn-primary" onclick="goToStep(3)">Next &rarr;</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- Step 3: Experiment Condition -->
+<!-- ================================================================ -->
+<div class="wizard-panel d-none" id="step-3">
+    <div class="card">
+        <div class="card-header"><h5>Step 3: Experiment Condition</h5></div>
+        <div class="card-body">
+            <div class="step-hero" style="background: linear-gradient(135deg, #f093fb10 0%, #f5576c10 100%); border-color: #f093fb20;">
+                <div class="step-hero-icon">&#129514;</div>
+                <div>
+                    <h6>Set Up Experiment Conditions</h6>
+                    <p>Define the carbon sources, substrate ratio, pH, initial biomass concentration, and operating mode (batch or continuous chemostat).</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="substrate-a" class="form-label">Substrate A</label>
+                    <select class="form-select" id="substrate-a">
+                        <option value="glucose">glucose</option>
+                    </select>
+                    <small class="text-muted">Primary carbon source.</small>
+                </div>
+                <div class="col-md-3" id="substrate-b-wrapper">
+                    <label for="substrate-b" class="form-label">Substrate B</label>
+                    <select class="form-select" id="substrate-b">
+                        <option value="xylose">xylose</option>
+                    </select>
+                    <small class="text-muted">Secondary carbon source (for dual-substrate models).</small>
+                </div>
+                <div class="col-md-3" id="ratio-wrapper">
+                    <label for="ratio-input" class="form-label">Ratio (A fraction): <span id="ratio-display">0.50</span></label>
+                    <input type="range" class="form-range" id="ratio-slider" min="0" max="1" step="0.01" value="0.5"
+                           oninput="document.getElementById('ratio-input').value=this.value; document.getElementById('ratio-display').textContent=parseFloat(this.value).toFixed(2)">
+                    <input type="number" class="form-control form-control-sm mt-1" id="ratio-input" min="0" max="1" step="0.01" value="0.5"
+                           oninput="document.getElementById('ratio-slider').value=this.value; document.getElementById('ratio-display').textContent=parseFloat(this.value).toFixed(2)">
+                    <small class="text-muted">Fraction of total substrate that is A. e.g. 0.5 = equal A and B.</small>
+                </div>
+                <div class="col-md-3">
+                    <label for="pH-input" class="form-label">pH</label>
+                    <input type="number" class="form-control" id="pH-input" min="2" max="10" step="0.1" value="6.0">
+                    <small class="text-muted">Culture pH. Used by cardinal pH model to scale growth rate.</small>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <label for="total-conc" class="form-label">Total Substrate (g/L)</label>
+                    <input type="number" class="form-control" id="total-conc" min="0" step="1" value="30">
+                    <small class="text-muted">Total initial substrate concentration. Split between A and B by ratio.</small>
+                </div>
+                <div class="col-md-3">
+                    <label for="dilution-rate" class="form-label">Dilution Rate D (1/h)</label>
+                    <input type="number" class="form-control" id="dilution-rate" min="0" step="0.01" value="0">
+                    <small class="text-muted">D = F/V. Set 0 for batch mode, &gt;0 for continuous (chemostat).</small>
+                </div>
+                <div class="col-md-3">
+                    <label for="X0-input" class="form-label">Initial Biomass X<sub>0</sub> (g/L)</label>
+                    <input type="number" class="form-control" id="X0-input" min="0" step="0.01" value="0.03">
+                    <small class="text-muted">Biomass concentration at time zero (inoculum).</small>
+                </div>
+            </div>
+            <div class="mt-3 d-flex justify-content-between">
+                <button class="btn btn-secondary" onclick="goToStep(2)">&larr; Back</button>
+                <button class="btn btn-primary" onclick="goToStep(4)">Next &rarr;</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- Step 4: Simulation Settings & Run -->
+<!-- ================================================================ -->
+<div class="wizard-panel d-none" id="step-4">
+    <div class="card">
+        <div class="card-header"><h5>Step 4: Run Simulation</h5></div>
+        <div class="card-body">
+            <div class="step-hero" style="background: linear-gradient(135deg, #a8e6cf10 0%, #3ecd5e10 100%); border-color: #a8e6cf20;">
+                <div class="step-hero-icon">&#9654;&#65039;</div>
+                <div>
+                    <h6>Choose Simulation Mode &amp; Run</h6>
+                    <p><strong>Single</strong> &mdash; one deterministic ODE solve to see the time-course trajectory.
+                       <strong>Monte Carlo</strong> &mdash; sample parameter uncertainty to get confidence intervals.
+                       <strong>Virtual Experiment</strong> &mdash; sweep pH &amp; substrate ratio via Latin Hypercube DOE, then rank conditions and visualise the Pareto front.</p>
+                </div>
+            </div>
+            <!-- Mode selector -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Mode</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="run_mode" id="mode-single" value="single" checked onchange="toggleRunMode()">
+                        <label class="form-check-label" for="mode-single">Single Simulation</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="run_mode" id="mode-mc" value="monte_carlo" onchange="toggleRunMode()">
+                        <label class="form-check-label" for="mode-mc">Monte Carlo</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="run_mode" id="mode-ve" value="virtual_experiment" onchange="toggleRunMode()">
+                        <label class="form-check-label" for="mode-ve">Virtual Experiment (DOE + MC)</label>
+                    </div>
+                    <small class="text-muted">Single: one deterministic run. MC: repeated runs sampling parameter uncertainty. VE: MC across multiple experimental conditions.</small>
+                </div>
+            </div>
+
+            <!-- Common time settings -->
+            <div class="row mb-3">
+                <div class="col-md-2">
+                    <label for="time-start" class="form-label">Time Start (h)</label>
+                    <input type="number" class="form-control form-control-sm" id="time-start" value="0" min="0">
+                </div>
+                <div class="col-md-2">
+                    <label for="time-end" class="form-label">Time End (h)</label>
+                    <input type="number" class="form-control form-control-sm" id="time-end" value="100" min="1">
+                </div>
+                <div class="col-md-2">
+                    <label for="n-points" class="form-label">N Points</label>
+                    <input type="number" class="form-control form-control-sm" id="n-points" value="500" min="10">
+                    <small class="text-muted">Output time resolution.</small>
+                </div>
+                <div class="col-md-2" id="method-wrapper">
+                    <label for="method-select" class="form-label">ODE Solver</label>
+                    <select class="form-select form-select-sm" id="method-select">
+                        <option value="odeint">odeint (LSODA)</option>
+                        <option value="RK45">RK45</option>
+                        <option value="BDF">BDF</option>
+                    </select>
+                    <small class="text-muted">LSODA auto-switches stiff/non-stiff. BDF for stiff systems.</small>
+                </div>
+            </div>
+
+            <!-- Monte Carlo settings (hidden by default) -->
+            <div class="d-none" id="mc-settings">
+                <hr>
+                <h6>Monte Carlo Settings</h6>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="n-samples" class="form-label">N Samples</label>
+                        <input type="number" class="form-control form-control-sm" id="n-samples" value="200" min="1">
+                        <small class="text-muted">Number of random parameter draws.</small>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="mc-seed" class="form-label">Seed</label>
+                        <input type="number" class="form-control form-control-sm" id="mc-seed" value="42">
+                        <small class="text-muted">Random seed for reproducibility.</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Virtual Experiment settings (hidden by default) -->
+            <div class="d-none" id="ve-settings">
+                <hr>
+                <h6>DOE Settings</h6>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="pH-range-min" class="form-label">pH Min</label>
+                        <input type="number" class="form-control form-control-sm" id="pH-range-min" value="4.0" step="0.1">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="pH-range-max" class="form-label">pH Max</label>
+                        <input type="number" class="form-control form-control-sm" id="pH-range-max" value="7.0" step="0.1">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="ratio-range-min" class="form-label">Ratio Min</label>
+                        <input type="number" class="form-control form-control-sm" id="ratio-range-min" value="0.0" step="0.05">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="ratio-range-max" class="form-label">Ratio Max</label>
+                        <input type="number" class="form-control form-control-sm" id="ratio-range-max" value="1.0" step="0.05">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="n-continuous" class="form-label">N Continuous</label>
+                        <input type="number" class="form-control form-control-sm" id="n-continuous" value="20" min="2">
+                        <small class="text-muted">LHS sample points for pH/ratio.</small>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="ve-n-samples" class="form-label">MC Samples/Cond</label>
+                        <input type="number" class="form-control form-control-sm" id="ve-n-samples" value="50" min="1">
+                        <small class="text-muted">MC replicates per condition.</small>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Objective Function</label>
+                        <small class="text-muted d-block mb-1">
+                            Ranking score and heatmap colour. Available variables:
+                            <code>mean_yield</code>, <code>std_yield</code>,
+                            <code>mean_mu_max</code>, <code>std_mu_max</code>.
+                        </small>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="obj-ranking" class="form-label">Ranking Score</label>
+                                <input type="text" class="form-control form-control-sm font-monospace" id="obj-ranking"
+                                       value="mean_yield - 0.5 * std_yield">
+                                <small class="text-muted">Higher is better. Conditions are sorted by this score.</small>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="obj-heatmap" class="form-label">Heatmap Metric</label>
+                                <select class="form-select form-select-sm" id="obj-heatmap">
+                                    <option value="mean_yield" selected>mean_yield</option>
+                                    <option value="mean_mu_max">mean_mu_max</option>
+                                    <option value="std_yield">std_yield</option>
+                                    <option value="std_mu_max">std_mu_max</option>
+                                </select>
+                                <small class="text-muted">Variable shown as heatmap colour.</small>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="obj-pareto" class="form-label">Pareto Objectives</label>
+                                <select class="form-select form-select-sm mb-1" id="obj-pareto-1">
+                                    <option value="mean_yield" selected>mean_yield</option>
+                                    <option value="mean_mu_max">mean_mu_max</option>
+                                    <option value="std_yield">std_yield</option>
+                                    <option value="std_mu_max">std_mu_max</option>
+                                </select>
+                                <select class="form-select form-select-sm" id="obj-pareto-2">
+                                    <option value="mean_yield">mean_yield</option>
+                                    <option value="mean_mu_max" selected>mean_mu_max</option>
+                                    <option value="std_yield">std_yield</option>
+                                    <option value="std_mu_max">std_mu_max</option>
+                                </select>
+                                <small class="text-muted">Two objectives for Pareto front (maximise both).</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validation warnings -->
+            <div id="run-warnings" class="mt-3 d-none">
+                <div class="alert alert-warning mb-2" id="run-warnings-text"></div>
+            </div>
+
+            <div class="mt-3 d-flex justify-content-between">
+                <button class="btn btn-secondary" onclick="goToStep(3)">&larr; Back</button>
+                <button class="btn btn-success btn-lg" id="btn-run" onclick="runSimulation()">
+                    Run Simulation
+                </button>
+            </div>
+
+            <!-- Progress bar (hidden by default) -->
+            <div class="mt-3 d-none" id="progress-container">
+                <div class="progress" style="height: 25px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" id="progress-bar"
+                         role="progressbar" style="width: 0%">0%</div>
+                </div>
+                <p class="text-muted mt-1" id="progress-text">Starting...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- Step 5: Results (v2 — gradient result cards) -->
+<!-- ================================================================ -->
+<div class="wizard-panel d-none" id="step-5">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="d-inline">Step 5: Results</h5>
+            <div class="float-end" id="export-buttons" style="display:none;">
+                <button class="btn btn-sm btn-outline-secondary" id="btn-export-csv" onclick="exportCSV()">Download CSV</button>
+                <button class="btn btn-sm btn-outline-secondary" id="btn-export-json" onclick="exportJSON()">Download JSON</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="step-hero" style="background: linear-gradient(135deg, #ff6b6b10 0%, #ee5a6f10 100%); border-color: #ff6b6b20;">
+                <div class="step-hero-icon">&#128202;</div>
+                <div>
+                    <h6>Analyse &amp; Export Results</h6>
+                    <p>Review the input parameters used, then explore key output metrics (<strong>Y<sub>X/S</sub></strong>, <strong>&mu;<sub>max</sub></strong>, <strong>Final Biomass</strong>) in gradient cards above the interactive time-course plot. Download the full dataset as CSV or JSON.</p>
+                </div>
+            </div>
+            <!-- Parameters summary (shown for all run modes) -->
+            <div id="params-summary" class="d-none mb-3">
+                <h6>Input Parameters</h6>
+                <div class="row">
+                    <div class="col-md-4">
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-light"><tr><th colspan="2">Strain &amp; Model</th></tr></thead>
+                            <tbody id="params-strain-table"></tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-light"><tr><th colspan="2">Experiment Condition</th></tr></thead>
+                            <tbody id="params-condition-table"></tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-light"><tr><th colspan="2">Simulation Settings</th></tr></thead>
+                            <tbody id="params-sim-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Output metrics legend -->
+            <div class="mb-3">
+                <small class="text-muted">
+                    <strong>Y_X/S</strong> = biomass yield on substrate (g biomass produced / g substrate consumed) &nbsp;|&nbsp;
+                    <strong>&#956;_max</strong> = maximum observed specific growth rate (1/h) &nbsp;|&nbsp;
+                    <strong>Final Biomass</strong> = X(t_end) in g/L
+                </small>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- v2: Gradient result cards (single sim)       -->
+            <!-- ============================================ -->
+            <div id="single-result" class="d-none">
+                <!-- Gradient metric cards -->
+                <div class="row mb-3" id="single-result-cards">
+                    <div class="col-md-4">
+                        <div class="result-card result-card-yield">
+                            <h6>Y_X/S (Yield)</h6>
+                            <div class="result-value" id="card-yield">--</div>
+                            <p class="result-sub">g biomass / g substrate</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="result-card result-card-mu">
+                            <h6>&#956;_max (observed)</h6>
+                            <div class="result-value" id="card-mu">--</div>
+                            <p class="result-sub">1/h</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="result-card result-card-biomass">
+                            <h6>Final Biomass</h6>
+                            <div class="result-value" id="card-biomass">--</div>
+                            <p class="result-sub">g/L</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="trajectory-chart"></div>
+                <div class="mt-3">
+                    <h6>Summary</h6>
+                    <table class="table table-sm table-bordered" style="max-width: 400px;">
+                        <tbody id="summary-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- v2: Gradient result cards (Monte Carlo)      -->
+            <!-- ============================================ -->
+            <div id="mc-result" class="d-none">
+                <!-- Gradient metric cards for MC -->
+                <div class="row mb-3" id="mc-result-cards">
+                    <div class="col-md-3">
+                        <div class="result-card result-card-yield">
+                            <h6>Mean Y_X/S</h6>
+                            <div class="result-value" id="mc-card-yield">--</div>
+                            <p class="result-sub">g/g</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="result-card result-card-mu">
+                            <h6>Mean &#956;_max</h6>
+                            <div class="result-value" id="mc-card-mu">--</div>
+                            <p class="result-sub">1/h</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="result-card result-card-substrate">
+                            <h6>Std Y_X/S</h6>
+                            <div class="result-value" id="mc-card-std-yield">--</div>
+                            <p class="result-sub">uncertainty</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="result-card result-card-ph">
+                            <h6>Valid Runs</h6>
+                            <div class="result-value" id="mc-card-valid">--</div>
+                            <p class="result-sub">of total samples</p>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="nav nav-tabs mb-2" id="mc-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#mc-pane-trajectory" type="button" role="tab">Trajectory Envelope</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#mc-pane-dist" type="button" role="tab">Distributions</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#mc-pane-summary" type="button" role="tab">Summary</button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="mc-pane-trajectory" role="tabpanel">
+                        <div id="mc-envelope-chart"></div>
+                    </div>
+                    <div class="tab-pane fade" id="mc-pane-dist" role="tabpanel">
+                        <div id="mc-dist-chart"></div>
+                    </div>
+                    <div class="tab-pane fade" id="mc-pane-summary" role="tabpanel">
+                        <div class="mt-3">
+                            <table class="table table-sm table-bordered" style="max-width: 500px;">
+                                <tbody id="mc-summary-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Virtual Experiment result -->
+            <div id="ve-result" class="d-none">
+                <ul class="nav nav-tabs" id="ve-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="tab-rankings" data-bs-toggle="tab" data-bs-target="#pane-rankings" type="button" role="tab">Rankings</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-heatmap" data-bs-toggle="tab" data-bs-target="#pane-heatmap" type="button" role="tab">Heatmap</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-pareto" data-bs-toggle="tab" data-bs-target="#pane-pareto" type="button" role="tab">Pareto Front</button>
+                    </li>
+                </ul>
+                <div class="tab-content mt-2" id="ve-tab-content">
+                    <div class="tab-pane fade show active" id="pane-rankings" role="tabpanel">
+                        <div id="rankings-container" class="table-responsive"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pane-heatmap" role="tabpanel">
+                        <div id="heatmap-chart"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pane-pareto" role="tabpanel">
+                        <div id="pareto-chart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button class="btn btn-secondary" onclick="goToStep(4)">&larr; Back to Settings</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- v2: Connector lines + gradient card population -->
+<script>
+(function() {
+    // Override goToStep to also update connector lines
+    var _origGoToStep = window.goToStep;
+    window.goToStep = function(step) {
+        _origGoToStep(step);
+        // Update connector lines: completed for steps before current
+        for (var c = 1; c <= 4; c++) {
+            var conn = document.getElementById('conn-' + c + '-' + (c+1));
+            if (conn) {
+                if (c < step) {
+                    conn.classList.add('completed');
+                } else {
+                    conn.classList.remove('completed');
+                }
+            }
+        }
+        // Re-trigger fade animation on the shown panel
+        var panel = document.getElementById('step-' + step);
+        if (panel) {
+            panel.style.animation = 'none';
+            panel.offsetHeight; // force reflow
+            panel.style.animation = '';
+        }
+    };
+
+    // Hook into the existing addSummaryRow to also populate gradient cards
+    var _origAddSummaryRow = window.addSummaryRow;
+    window.addSummaryRow = function(tbody, label, value) {
+        // Call original
+        if (_origAddSummaryRow) _origAddSummaryRow(tbody, label, value);
+        else {
+            var tr = document.createElement('tr');
+            tr.innerHTML = '<td class="fw-bold">' + label + '</td><td>' + value + '</td>';
+            tbody.appendChild(tr);
+        }
+        // Populate single-sim gradient cards
+        if (tbody.id === 'summary-table') {
+            if (label.indexOf('Y_X/S') >= 0 || label.indexOf('Yield') >= 0) {
+                var el = document.getElementById('card-yield');
+                if (el) el.textContent = value;
+            } else if (label.indexOf('Final Biomass') >= 0) {
+                var el = document.getElementById('card-biomass');
+                if (el) el.textContent = value;
+            } else if (label.indexOf('\u03BC_max') >= 0 || label.indexOf('mu_max') >= 0) {
+                var el = document.getElementById('card-mu');
+                if (el) el.textContent = value;
+            }
+        }
+        // Populate MC gradient cards
+        if (tbody.id === 'mc-summary-table') {
+            if (label === 'Mean Y_X/S') {
+                var el = document.getElementById('mc-card-yield');
+                if (el) el.textContent = value;
+            } else if (label.indexOf('Mean \u03BC_max') >= 0 || label === 'Mean mu_max') {
+                var el = document.getElementById('mc-card-mu');
+                if (el) el.textContent = value;
+            } else if (label === 'Std Y_X/S') {
+                var el = document.getElementById('mc-card-std-yield');
+                if (el) el.textContent = value;
+            } else if (label === 'Valid Runs') {
+                var el = document.getElementById('mc-card-valid');
+                if (el) el.textContent = value;
+            }
+        }
+    };
+})();
+</script>
+
+{% endblock %}
