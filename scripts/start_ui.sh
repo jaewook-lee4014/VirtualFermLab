@@ -5,13 +5,14 @@
 #   srun --jobid=<JOB_ID> --overlap bash scripts/start_ui.sh
 #
 # Environment variables:
-#   UI_PORT        (default: 51665)
+#   UI_PORT        (default: 8080)
 #   VLLM_BASE_URL  (default: http://localhost:8000/v1)
 
 set -euo pipefail
 
-PYTHON="/scratch/users/k23070952/vllm_env310/bin/python"
-PORT="${UI_PORT:-51665}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PYTHON="${SCRIPT_DIR}/../.venv/bin/python"
+PORT="${UI_PORT:-8080}"
 export VLLM_BASE_URL="${VLLM_BASE_URL:-http://localhost:8000/v1}"
 
 echo "Starting VirtualFermLab UI on port ${PORT}"
