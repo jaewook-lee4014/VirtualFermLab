@@ -12,12 +12,12 @@
 
 set -euo pipefail
 
-export HF_HOME="${HF_HOME:-${HOME}/.cache/huggingface}"
+export HF_HOME="${HF_HOME:-/dev/shm/hf_cache}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PYTHON="${SCRIPT_DIR}/../.venv/bin/python"
 PORT="${VLLM_PORT:-8000}"
-MODEL="${VLLM_MODEL:-Qwen/Qwen2.5-32B-Instruct}"
+MODEL="${VLLM_MODEL:-Qwen/Qwen3.5-27B}"
 TP_SIZE="${VLLM_TP_SIZE:-2}"
 
 echo "Starting vLLM server on port ${PORT} with model ${MODEL}"
