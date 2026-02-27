@@ -181,7 +181,7 @@ class LLMClient:
     def __init__(
         self,
         base_url: str | None = None,
-        model: str = "Qwen/Qwen2.5-32B-Instruct",
+        model: str = "/dev/shm/models/Qwen2.5-32B-Instruct",
         max_model_tokens: int = 4096,
     ) -> None:
         self.base_url = base_url or os.environ.get(
