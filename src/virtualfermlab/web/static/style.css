@@ -555,3 +555,96 @@ body {
     font-size: 1rem;
     border-radius: 8px;
 }
+
+/* ================================================================
+   Papers accordion (Strain Discovery)
+   ================================================================ */
+.papers-accordion .accordion-item {
+    border: 1px solid #e9ecef;
+    border-radius: 8px !important;
+    margin-bottom: 0.4rem;
+    overflow: hidden;
+}
+
+.papers-accordion .accordion-button {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+    background: #f8f9fa;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.papers-accordion .accordion-button:not(.collapsed) {
+    background: linear-gradient(135deg, #667eea08 0%, #764ba208 100%);
+    color: #333;
+    box-shadow: none;
+}
+
+.papers-accordion .accordion-button:focus {
+    box-shadow: none;
+    border-color: #dee2e6;
+}
+
+.papers-accordion .accordion-body {
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+}
+
+.papers-accordion .paper-title-text {
+    font-weight: 600;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.papers-accordion .paper-doi-link {
+    font-size: 0.8rem;
+    color: #667eea;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.papers-accordion .paper-doi-link:hover {
+    text-decoration: underline;
+}
+
+.papers-accordion .paper-meta {
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+/* Confidence badges */
+.badge-conf-A {
+    background-color: #198754;
+    color: white;
+}
+
+.badge-conf-B {
+    background-color: #ffc107;
+    color: #333;
+}
+
+/* Evidence text */
+.evidence-text {
+    font-style: italic;
+    font-size: 0.8rem;
+    color: #555;
+    background: #f8f9fa;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    display: inline-block;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.evidence-text:hover {
+    white-space: normal;
+    max-width: none;
+}

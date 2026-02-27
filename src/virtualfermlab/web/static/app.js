@@ -836,6 +836,15 @@ function _fetchDiscoveryResult() {
             }
             resultDiv.innerHTML = html;
 
+            // Build papers accordion
+            var papersContainer = document.getElementById('discovery-papers');
+            if (data.papers && data.papers.length > 0) {
+                document.getElementById('papers-accordion').innerHTML = buildPapersAccordion(data.papers);
+                papersContainer.classList.remove('d-none');
+            } else {
+                papersContainer.classList.add('d-none');
+            }
+
             // Load the profile into the UI
             if (data.profile) {
                 strainProfile = data.profile;
@@ -868,4 +877,77 @@ function _fetchDiscoveryResult() {
             _resetDiscoveryButton();
             alert('Failed to fetch discovery result: ' + err);
         });
+}
+
+function buildPapersAccordion(papers) {
+    var html = '';
+    for (var i = 0; i < papers.length; i++) {
+        var p = papers[i];
+        var collapseId = 'paper-collapse-' + i;
+        var headerId = 'paper-header-' + i;
+        var nParams = p.params ? p.params.length : 0;
+
+        // Header: title + DOI link + param count badge
+        var titleText = _escapeHtml(p.title || 'Untitled');
+        var doiLink = '';
+        if (p.doi) {
+            doiLink = ' <a href="https://doi.org/' + _escapeHtml(p.doi) + '" target="_blank" class="paper-doi-link" onclick="event.stopPropagation();">' + _escapeHtml(p.doi) + '</a>';
+        }
+        var badge = nParams > 0
+            ? '<span class="badge bg-primary ms-2">' + nParams + ' param' + (nParams > 1 ? 's' : '') + '</span>'
+            : '<span class="badge bg-secondary ms-2">0 params</span>';
+
+        // Body: meta info + params table
+        var bodyHtml = '';
+        if (p.journal || p.year || p.authors) {
+            bodyHtml += '<div class="paper-meta mb-2">';
+            if (p.authors) bodyHtml += '<span class="text-muted">' + _escapeHtml(p.authors) + '</span>';
+            if (p.journal) bodyHtml += (p.authors ? ' &mdash; ' : '') + '<em>' + _escapeHtml(p.journal) + '</em>';
+            if (p.year) bodyHtml += ' (' + p.year + ')';
+            bodyHtml += '</div>';
+        }
+
+        if (nParams > 0) {
+            bodyHtml += '<table class="table table-sm table-bordered mb-0">';
+            bodyHtml += '<thead class="table-light"><tr><th>Name</th><th>Value</th><th>Unit</th><th>Substrate</th><th>Evidence</th><th>Confidence</th></tr></thead>';
+            bodyHtml += '<tbody>';
+            for (var j = 0; j < p.params.length; j++) {
+                var param = p.params[j];
+                var confClass = param.confidence === 'A' ? 'badge-conf-A' : 'badge-conf-B';
+                var evidenceHtml = param.evidence
+                    ? '<span class="evidence-text">' + _escapeHtml(param.evidence) + '</span>'
+                    : '<span class="text-muted">-</span>';
+                bodyHtml += '<tr>';
+                bodyHtml += '<td>' + _escapeHtml(param.name || '') + '</td>';
+                bodyHtml += '<td>' + (param.value != null ? param.value : '-') + '</td>';
+                bodyHtml += '<td>' + _escapeHtml(param.unit || '-') + '</td>';
+                bodyHtml += '<td>' + _escapeHtml(param.substrate || '-') + '</td>';
+                bodyHtml += '<td>' + evidenceHtml + '</td>';
+                bodyHtml += '<td><span class="badge ' + confClass + '">' + _escapeHtml(param.confidence || 'B') + '</span></td>';
+                bodyHtml += '</tr>';
+            }
+            bodyHtml += '</tbody></table>';
+        } else {
+            bodyHtml += '<p class="text-muted mb-0">No parameters extracted from this paper.</p>';
+        }
+
+        html += '<div class="accordion-item">';
+        html += '<h2 class="accordion-header" id="' + headerId + '">';
+        html += '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#' + collapseId + '" aria-expanded="false" aria-controls="' + collapseId + '">';
+        html += '<span class="paper-title-text">' + titleText + '</span>' + doiLink + badge;
+        html += '</button>';
+        html += '</h2>';
+        html += '<div id="' + collapseId + '" class="accordion-collapse collapse" aria-labelledby="' + headerId + '" data-bs-parent="#papers-accordion">';
+        html += '<div class="accordion-body">' + bodyHtml + '</div>';
+        html += '</div>';
+        html += '</div>';
+    }
+    return html;
+}
+
+function _escapeHtml(str) {
+    if (!str) return '';
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
 }

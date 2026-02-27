@@ -21,9 +21,15 @@ from virtualfermlab.discovery.prompts import (
 logger = logging.getLogger(__name__)
 
 # Allowed parameter names — anything outside this set is discarded.
+# Only ORGANISM GROWTH kinetic parameters; enzyme Km/Vmax/Ki are excluded.
 _VALID_PARAM_NAMES = frozenset({
-    "mu_max", "Ks", "Yxs", "K_I",
-    "pH_opt", "pH_min", "pH_max", "lag_time",
+    "mu_max", "Ks", "Yxs", "K_I", "lag_time",
+})
+
+# Recognised kinetic model names (normalised to lowercase for matching).
+_VALID_KINETIC_MODELS = frozenset({
+    "monod", "contois", "logistic", "andrews", "haldane",
+    "tessier", "moser", "empirical",
 })
 
 
@@ -77,8 +83,6 @@ def _validate_param(p: dict) -> bool:
     if name == "Yxs" and not (0.001 <= val <= 2.0):
         return False
     if name == "K_I" and not (0.001 <= val <= 500.0):
-        return False
-    if name in ("pH_opt", "pH_min", "pH_max") and not (0.0 <= val <= 14.0):
         return False
     if name == "lag_time" and not (0.0 <= val <= 200.0):
         return False
@@ -181,13 +185,15 @@ class LLMClient:
     def __init__(
         self,
         base_url: str | None = None,
-        model: str = "/dev/shm/models/Qwen2.5-32B-Instruct",
+        model: str | None = None,
         max_model_tokens: int = 4096,
     ) -> None:
         self.base_url = base_url or os.environ.get(
             "VLLM_BASE_URL", "http://erc-hpc-comp247:8000/v1"
         )
-        self.model = model
+        self.model = model or os.environ.get(
+            "VLLM_MODEL_NAME", "/dev/shm/models/Qwen2.5-32B-Instruct"
+        )
         self.max_model_tokens = max_model_tokens
 
     def is_available(self) -> bool:
@@ -231,8 +237,9 @@ class LLMClient:
         """Parse LLM response text into validated parameter dicts.
 
         Each returned dict includes ``evidence`` (verbatim quote from the
-        paper, or ``None``) and ``confidence`` (``"A"`` when the numeric
-        value appears inside the evidence text, ``"B"`` otherwise).
+        paper, or ``None``), ``confidence`` (``"A"`` when the numeric
+        value appears inside the evidence text, ``"B"`` otherwise), and
+        ``kinetic_model`` (e.g. ``"Monod"``, ``"Contois"``, or ``None``).
         """
         data = _extract_json(content)
         if data is None:
@@ -244,6 +251,17 @@ class LLMClient:
 
         strain_name = data.get("strain_name", "")
         conditions = data.get("conditions")
+        # Normalise kinetic_model
+        raw_model = data.get("kinetic_model")
+        kinetic_model = None
+        if raw_model and str(raw_model).strip().lower() not in ("null", "none", ""):
+            km = str(raw_model).strip()
+            if km.lower() in _VALID_KINETIC_MODELS:
+                # Capitalise properly
+                kinetic_model = km.capitalize()
+            else:
+                kinetic_model = km  # keep as-is for unusual models
+
         params: list[dict] = []
         for p in data.get("parameters", []):
             if not _validate_param(p):
@@ -263,6 +281,7 @@ class LLMClient:
                 "conditions": conditions,
                 "evidence": evidence,
                 "confidence": confidence,
+                "kinetic_model": kinetic_model,
             })
         return params
 

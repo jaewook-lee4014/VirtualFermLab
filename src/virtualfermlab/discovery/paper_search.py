@@ -337,7 +337,7 @@ def search_papers(
     -------
     list of paper dicts.
     """
-    query_parts = [f'"{strain_name}"', "fermentation", "kinetics"]
+    query_parts = [f'"{strain_name}"', "fermentation", "growth kinetics"]
     if substrates:
         query_parts.extend(substrates)
     query = " ".join(query_parts)
@@ -389,7 +389,7 @@ def search_papers_into_queue(
 
     Returns the total number of papers pushed (excluding sentinel).
     """
-    query_parts = [f'"{strain_name}"', "fermentation", "kinetics"]
+    query_parts = [f'"{strain_name}"', "fermentation", "growth kinetics"]
     if substrates:
         query_parts.extend(substrates)
     query = " ".join(query_parts)

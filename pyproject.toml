@@ -23,6 +23,7 @@ dependencies = [
 discovery = ["requests>=2.28"]
 extraction_api = ["flask>=1.0", "requests>=2.28"]
 dev = ["pytest>=7.0", "pytest-cov>=4.0"]
+prediction = ["xgboost>=1.7", "scikit-learn>=1.2"]
 web = ["flask>=1.0", "plotly>=5.0"]
 
 [tool.setuptools.packages.find]

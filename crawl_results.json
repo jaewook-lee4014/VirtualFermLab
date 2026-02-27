@@ -1,0 +1,942 @@
+[
+  {
+    "strain": "Penicillium cyclopium",
+    "result": {
+      "papers_found": 0,
+      "params_extracted": 0,
+      "profile": {
+        "cardinal_pH": {
+          "pH_max": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 5.0
+          },
+          "pH_min": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 4.5
+          },
+          "pH_opt": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 4.5
+          }
+        },
+        "enzyme_params": {
+          "K_Z_S": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "ESCAPE25 calibration",
+            "std": 0.1,
+            "type": "normal",
+            "value": 0.2
+          },
+          "K_Z_c": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "ESCAPE25 calibration",
+            "std": 0.1,
+            "type": "normal",
+            "value": 0.3
+          },
+          "K_Z_d": {
+            "confidence": "C",
+            "high": 0.15,
+            "low": 0.0,
+            "source": "ESCAPE25 calibration range",
+            "std": null,
+            "type": "uniform",
+            "value": 0.05
+          }
+        },
+        "inhibitions": [
+          {
+            "K_I": {
+              "confidence": "B",
+              "high": null,
+              "low": null,
+              "source": "ESCAPE25 calibration K_I",
+              "std": 0.15,
+              "type": "normal",
+              "value": 0.5
+            },
+            "inhibited": "xylose",
+            "inhibitor": "glucose",
+            "mechanism": "direct"
+          }
+        ],
+        "name": "Penicillium cyclopium",
+        "substrates": {
+          "MC1": {
+            "Ks": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus niger",
+              "std": null,
+              "type": "fixed",
+              "value": 0.2
+            },
+            "Yxs": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus niger",
+              "std": null,
+              "type": "fixed",
+              "value": 0.3
+            },
+            "mu_max": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus niger",
+              "std": null,
+              "type": "fixed",
+              "value": 0.028
+            },
+            "name": "MC1"
+          },
+          "soybean hull": {
+            "Ks": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus niger",
+              "std": null,
+              "type": "fixed",
+              "value": 0.2
+            },
+            "Yxs": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus niger",
+              "std": null,
+              "type": "fixed",
+              "value": 0.3
+            },
+            "mu_max": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus niger",
+              "std": null,
+              "type": "fixed",
+              "value": 0.1
+            },
+            "name": "soybean hull"
+          }
+        }
+      },
+      "similar_strain": "Aspergillus niger",
+      "similarity_score": 0.8125,
+      "source": "taxonomy_match",
+      "stages": [
+        {
+          "duration_ms": 323.0,
+          "message": "Found 0 papers",
+          "stage": "search",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 323.0,
+          "message": "No params extracted",
+          "stage": "extract",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 0.0,
+          "message": "Data persisted in stages 1-2",
+          "stage": "store",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 1698.8,
+          "message": "Best match: Aspergillus niger (sim=0.81)",
+          "stage": "taxonomy",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 8.8,
+          "message": "Profile built (taxonomy_match)",
+          "stage": "build_profile",
+          "status": "completed"
+        }
+      ],
+      "strain_name": "Penicillium cyclopium"
+    }
+  },
+  {
+    "strain": "Rhizopus chinensis",
+    "result": {
+      "papers_found": 0,
+      "params_extracted": 0,
+      "profile": {
+        "cardinal_pH": {
+          "pH_max": {
+            "confidence": "C",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 7.5
+          },
+          "pH_min": {
+            "confidence": "C",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 3.5
+          },
+          "pH_opt": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 6.0
+          }
+        },
+        "enzyme_params": {
+          "K_Z_S": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "ESCAPE25 calibration",
+            "std": 0.1,
+            "type": "normal",
+            "value": 0.2
+          },
+          "K_Z_c": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "ESCAPE25 calibration",
+            "std": 0.1,
+            "type": "normal",
+            "value": 0.3
+          },
+          "K_Z_d": {
+            "confidence": "C",
+            "high": 0.15,
+            "low": 0.0,
+            "source": "ESCAPE25 calibration range",
+            "std": null,
+            "type": "uniform",
+            "value": 0.05
+          }
+        },
+        "inhibitions": [
+          {
+            "K_I": {
+              "confidence": "B",
+              "high": null,
+              "low": null,
+              "source": "ESCAPE25 calibration K_I",
+              "std": 0.15,
+              "type": "normal",
+              "value": 0.5
+            },
+            "inhibited": "xylose",
+            "inhibitor": "glucose",
+            "mechanism": "direct"
+          }
+        ],
+        "name": "Rhizopus chinensis",
+        "substrates": {
+          "Glucose": {
+            "Ks": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Rhizopus oryzae",
+              "std": null,
+              "type": "fixed",
+              "value": 0.13
+            },
+            "Yxs": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Rhizopus oryzae",
+              "std": null,
+              "type": "fixed",
+              "value": 0.13
+            },
+            "mu_max": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Rhizopus oryzae",
+              "std": null,
+              "type": "fixed",
+              "value": 0.13
+            },
+            "name": "Glucose"
+          },
+          "glycerol": {
+            "Ks": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Rhizopus oryzae",
+              "std": null,
+              "type": "fixed",
+              "value": 0.2
+            },
+            "Yxs": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Rhizopus oryzae",
+              "std": null,
+              "type": "fixed",
+              "value": 0.61
+            },
+            "mu_max": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Rhizopus oryzae",
+              "std": null,
+              "type": "fixed",
+              "value": 0.24
+            },
+            "name": "glycerol"
+          },
+          "sorbitol": {
+            "Ks": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Rhizopus oryzae",
+              "std": null,
+              "type": "fixed",
+              "value": 0.2
+            },
+            "Yxs": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Rhizopus oryzae",
+              "std": null,
+              "type": "fixed",
+              "value": 0.56
+            },
+            "mu_max": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Rhizopus oryzae",
+              "std": null,
+              "type": "fixed",
+              "value": 0.03
+            },
+            "name": "sorbitol"
+          }
+        }
+      },
+      "similar_strain": "Rhizopus oryzae",
+      "similarity_score": 0.8571428571428571,
+      "source": "taxonomy_match",
+      "stages": [
+        {
+          "duration_ms": 524.5,
+          "message": "Found 0 papers",
+          "stage": "search",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 524.6,
+          "message": "No params extracted",
+          "stage": "extract",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 0.0,
+          "message": "Data persisted in stages 1-2",
+          "stage": "store",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 1844.4,
+          "message": "Best match: Rhizopus oryzae (sim=0.86)",
+          "stage": "taxonomy",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 16.0,
+          "message": "Profile built (taxonomy_match)",
+          "stage": "build_profile",
+          "status": "completed"
+        }
+      ],
+      "strain_name": "Rhizopus chinensis"
+    }
+  },
+  {
+    "strain": "Candida intermedia",
+    "result": {
+      "papers_found": 5,
+      "params_extracted": 0,
+      "profile": {
+        "cardinal_pH": {
+          "pH_max": {
+            "confidence": "C",
+            "high": 8.0,
+            "low": 7.0,
+            "source": "Estimated upper pH limit",
+            "std": null,
+            "type": "uniform",
+            "value": 7.5
+          },
+          "pH_min": {
+            "confidence": "C",
+            "high": 4.0,
+            "low": 3.0,
+            "source": "Estimated from MPR pH experiment (no growth at pH 4.0)",
+            "std": null,
+            "type": "uniform",
+            "value": 3.5
+          },
+          "pH_opt": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "MPR pH experiment best growth at pH 6.0-6.5",
+            "std": 0.3,
+            "type": "normal",
+            "value": 6.0
+          }
+        },
+        "enzyme_params": {
+          "K_Z_S": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "ESCAPE25 calibration",
+            "std": 0.1,
+            "type": "normal",
+            "value": 0.2
+          },
+          "K_Z_c": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "ESCAPE25 calibration",
+            "std": 0.1,
+            "type": "normal",
+            "value": 0.3
+          },
+          "K_Z_d": {
+            "confidence": "C",
+            "high": 0.15,
+            "low": 0.0,
+            "source": "ESCAPE25 calibration range",
+            "std": null,
+            "type": "uniform",
+            "value": 0.05
+          }
+        },
+        "inhibitions": [
+          {
+            "K_I": {
+              "confidence": "B",
+              "high": null,
+              "low": null,
+              "source": "ESCAPE25 calibration K_I",
+              "std": 0.15,
+              "type": "normal",
+              "value": 0.5
+            },
+            "inhibited": "xylose",
+            "inhibitor": "glucose",
+            "mechanism": "direct"
+          }
+        ],
+        "name": "Candida intermedia",
+        "substrates": {
+          "glucose": {
+            "Ks": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Hansenula polymorpha",
+              "std": null,
+              "type": "fixed",
+              "value": 0.2
+            },
+            "Yxs": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Hansenula polymorpha",
+              "std": null,
+              "type": "fixed",
+              "value": 0.29
+            },
+            "mu_max": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Hansenula polymorpha",
+              "std": null,
+              "type": "fixed",
+              "value": 0.1
+            },
+            "name": "glucose"
+          },
+          "xylose": {
+            "Ks": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Hansenula polymorpha",
+              "std": null,
+              "type": "fixed",
+              "value": 0.15
+            },
+            "Yxs": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Hansenula polymorpha",
+              "std": null,
+              "type": "fixed",
+              "value": 0.35
+            },
+            "mu_max": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Hansenula polymorpha",
+              "std": null,
+              "type": "fixed",
+              "value": 0.045
+            },
+            "name": "xylose"
+          }
+        }
+      },
+      "similar_strain": "Hansenula polymorpha",
+      "similarity_score": 0.6923076923076923,
+      "source": "taxonomy_match",
+      "stages": [
+        {
+          "duration_ms": 1260.4,
+          "message": "Found 5 papers",
+          "stage": "search",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 138853.2,
+          "message": "No params extracted",
+          "stage": "extract",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 0.0,
+          "message": "Data persisted in stages 1-2",
+          "stage": "store",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 1756.3,
+          "message": "Best match: Hansenula polymorpha (sim=0.69)",
+          "stage": "taxonomy",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 26.9,
+          "message": "Profile built (taxonomy_match)",
+          "stage": "build_profile",
+          "status": "completed"
+        }
+      ],
+      "strain_name": "Candida intermedia"
+    }
+  },
+  {
+    "strain": "Aspergillus fumigatus",
+    "result": {
+      "papers_found": 11,
+      "params_extracted": 8,
+      "profile": {
+        "cardinal_pH": {
+          "pH_max": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 9.0
+          },
+          "pH_min": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 7.0
+          },
+          "pH_opt": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 7.0
+          }
+        },
+        "enzyme_params": {
+          "K_Z_S": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "ESCAPE25 calibration",
+            "std": 0.1,
+            "type": "normal",
+            "value": 0.2
+          },
+          "K_Z_c": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "ESCAPE25 calibration",
+            "std": 0.1,
+            "type": "normal",
+            "value": 0.3
+          },
+          "K_Z_d": {
+            "confidence": "C",
+            "high": 0.15,
+            "low": 0.0,
+            "source": "ESCAPE25 calibration range",
+            "std": null,
+            "type": "uniform",
+            "value": 0.05
+          }
+        },
+        "inhibitions": [
+          {
+            "K_I": {
+              "confidence": "B",
+              "high": null,
+              "low": null,
+              "source": "ESCAPE25 calibration K_I",
+              "std": 0.15,
+              "type": "normal",
+              "value": 0.5
+            },
+            "inhibited": "xylose",
+            "inhibitor": "glucose",
+            "mechanism": "direct"
+          }
+        ],
+        "name": "Aspergillus fumigatus",
+        "substrates": {
+          "birchwood xylan": {
+            "Ks": {
+              "confidence": "B",
+              "high": null,
+              "low": null,
+              "source": "literature",
+              "std": null,
+              "type": "fixed",
+              "value": 11.66
+            },
+            "Yxs": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "biological default",
+              "std": null,
+              "type": "fixed",
+              "value": 0.3
+            },
+            "mu_max": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "biological default",
+              "std": null,
+              "type": "fixed",
+              "value": 0.1
+            },
+            "name": "birchwood xylan"
+          },
+          "cellulose": {
+            "Ks": {
+              "confidence": "B",
+              "high": null,
+              "low": null,
+              "source": "literature",
+              "std": null,
+              "type": "fixed",
+              "value": 6.7
+            },
+            "Yxs": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "biological default",
+              "std": null,
+              "type": "fixed",
+              "value": 0.3
+            },
+            "mu_max": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "biological default",
+              "std": null,
+              "type": "fixed",
+              "value": 0.1
+            },
+            "name": "cellulose"
+          }
+        }
+      },
+      "similar_strain": "Aspergillus niger",
+      "similarity_score": 0.875,
+      "source": "literature",
+      "stages": [
+        {
+          "duration_ms": 1699.5,
+          "message": "Found 11 papers",
+          "stage": "search",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 274824.0,
+          "message": "Extracted 8 params",
+          "stage": "extract",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 0.0,
+          "message": "Data persisted in stages 1-2",
+          "stage": "store",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 1663.6,
+          "message": "Best match: Aspergillus niger (sim=0.88)",
+          "stage": "taxonomy",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 24.2,
+          "message": "Profile built (literature)",
+          "stage": "build_profile",
+          "status": "completed"
+        }
+      ],
+      "strain_name": "Aspergillus fumigatus"
+    }
+  },
+  {
+    "strain": "Torula sp.",
+    "result": {
+      "papers_found": 1,
+      "params_extracted": 3,
+      "profile": {
+        "cardinal_pH": {
+          "pH_max": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 7.0
+          },
+          "pH_min": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 3.0
+          },
+          "pH_opt": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "",
+            "std": null,
+            "type": "fixed",
+            "value": 5.0
+          }
+        },
+        "enzyme_params": {
+          "K_Z_S": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "ESCAPE25 calibration",
+            "std": 0.1,
+            "type": "normal",
+            "value": 0.2
+          },
+          "K_Z_c": {
+            "confidence": "B",
+            "high": null,
+            "low": null,
+            "source": "ESCAPE25 calibration",
+            "std": 0.1,
+            "type": "normal",
+            "value": 0.3
+          },
+          "K_Z_d": {
+            "confidence": "C",
+            "high": 0.15,
+            "low": 0.0,
+            "source": "ESCAPE25 calibration range",
+            "std": null,
+            "type": "uniform",
+            "value": 0.05
+          }
+        },
+        "inhibitions": [
+          {
+            "K_I": {
+              "confidence": "B",
+              "high": null,
+              "low": null,
+              "source": "ESCAPE25 calibration K_I",
+              "std": 0.15,
+              "type": "normal",
+              "value": 0.5
+            },
+            "inhibited": "xylose",
+            "inhibitor": "glucose",
+            "mechanism": "direct"
+          }
+        ],
+        "name": "Torula sp.",
+        "substrates": {
+          "birchwood xylan": {
+            "Ks": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus fumigatus",
+              "std": null,
+              "type": "fixed",
+              "value": 11.66
+            },
+            "Yxs": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus fumigatus",
+              "std": null,
+              "type": "fixed",
+              "value": 0.3
+            },
+            "mu_max": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus fumigatus",
+              "std": null,
+              "type": "fixed",
+              "value": 0.1
+            },
+            "name": "birchwood xylan"
+          },
+          "cellulose": {
+            "Ks": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus fumigatus",
+              "std": null,
+              "type": "fixed",
+              "value": 6.7
+            },
+            "Yxs": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus fumigatus",
+              "std": null,
+              "type": "fixed",
+              "value": 0.3
+            },
+            "mu_max": {
+              "confidence": "C",
+              "high": null,
+              "low": null,
+              "source": "taxonomy match: Aspergillus fumigatus",
+              "std": null,
+              "type": "fixed",
+              "value": 0.1
+            },
+            "name": "cellulose"
+          }
+        }
+      },
+      "similar_strain": "Aspergillus fumigatus",
+      "similarity_score": 0.5294117647058824,
+      "source": "literature",
+      "stages": [
+        {
+          "duration_ms": 1013.9,
+          "message": "Found 1 papers",
+          "stage": "search",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 25575.4,
+          "message": "Extracted 3 params",
+          "stage": "extract",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 0.0,
+          "message": "Data persisted in stages 1-2",
+          "stage": "store",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 1587.6,
+          "message": "Best match: Aspergillus fumigatus (sim=0.53)",
+          "stage": "taxonomy",
+          "status": "completed"
+        },
+        {
+          "duration_ms": 28.6,
+          "message": "Profile built (literature)",
+          "stage": "build_profile",
+          "status": "completed"
+        }
+      ],
+      "strain_name": "Torula sp."
+    }
+  }
+]

@@ -721,9 +721,13 @@ def _discovery_worker(task_id: str, strain_name: str):
             task.progress = stage_map.get(info.get("stage"), 0)
 
     try:
+        from virtualfermlab.discovery.db import get_papers_with_params
         from virtualfermlab.discovery.pipeline import run_discovery
 
         result = run_discovery(strain_name, progress_cb=progress_cb)
+
+        # Fetch detailed paper + param data for the UI accordion
+        papers_data = get_papers_with_params(strain_name)
 
         # Serialise the DiscoveryResult for JSON transport
         result_dict = {
@@ -735,6 +739,7 @@ def _discovery_worker(task_id: str, strain_name: str):
             "similarity_score": result.similarity_score,
             "stages": result.stages,
             "profile": _serialize_profile(result.profile) if result.profile else None,
+            "papers": papers_data,
         }
         task.result = {"discovery": result_dict}
         task.status = "completed"
