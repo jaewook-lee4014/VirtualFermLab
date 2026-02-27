@@ -131,9 +131,11 @@ class TestSearchSemanticScholar:
 
 
 class TestSearchPapers:
+    @mock.patch("virtualfermlab.discovery.paper_search.search_openalex", return_value=[])
+    @mock.patch("virtualfermlab.discovery.paper_search.search_europe_pmc", return_value=[])
     @mock.patch("virtualfermlab.discovery.paper_search.search_semantic_scholar")
     @mock.patch("virtualfermlab.discovery.paper_search.search_pubmed")
-    def test_deduplicates_by_doi(self, mock_pm, mock_s2):
+    def test_deduplicates_by_doi(self, mock_pm, mock_s2, mock_epmc, mock_oa):
         paper_common = {
             "pmid": "111",
             "title": "Paper A",
@@ -152,9 +154,11 @@ class TestSearchPapers:
 
 
 class TestSearchPapersIntoQueue:
+    @mock.patch("virtualfermlab.discovery.paper_search.search_openalex", return_value=[])
+    @mock.patch("virtualfermlab.discovery.paper_search.search_europe_pmc", return_value=[])
     @mock.patch("virtualfermlab.discovery.paper_search.search_semantic_scholar")
     @mock.patch("virtualfermlab.discovery.paper_search.search_pubmed")
-    def test_pushes_papers_and_sentinel(self, mock_pm, mock_s2):
+    def test_pushes_papers_and_sentinel(self, mock_pm, mock_s2, mock_epmc, mock_oa):
         paper_a = {
             "pmid": "1", "title": "Paper A", "authors": "", "journal": "",
             "year": 2023, "abstract": "text", "doi": "10.1/a", "source": "pubmed",
@@ -178,9 +182,11 @@ class TestSearchPapersIntoQueue:
             items.append(item)
         assert len(items) == 2
 
+    @mock.patch("virtualfermlab.discovery.paper_search.search_openalex", return_value=[])
+    @mock.patch("virtualfermlab.discovery.paper_search.search_europe_pmc", return_value=[])
     @mock.patch("virtualfermlab.discovery.paper_search.search_semantic_scholar")
     @mock.patch("virtualfermlab.discovery.paper_search.search_pubmed")
-    def test_deduplicates_by_doi(self, mock_pm, mock_s2):
+    def test_deduplicates_by_doi(self, mock_pm, mock_s2, mock_epmc, mock_oa):
         paper = {
             "pmid": "1", "title": "Same", "authors": "", "journal": "",
             "year": 2023, "abstract": "text", "doi": "10.1/same", "source": "pubmed",
@@ -193,9 +199,11 @@ class TestSearchPapersIntoQueue:
 
         assert count == 1
 
+    @mock.patch("virtualfermlab.discovery.paper_search.search_openalex", return_value=[])
+    @mock.patch("virtualfermlab.discovery.paper_search.search_europe_pmc", return_value=[])
     @mock.patch("virtualfermlab.discovery.paper_search.search_semantic_scholar")
     @mock.patch("virtualfermlab.discovery.paper_search.search_pubmed")
-    def test_sentinel_sent_even_when_no_papers(self, mock_pm, mock_s2):
+    def test_sentinel_sent_even_when_no_papers(self, mock_pm, mock_s2, mock_epmc, mock_oa):
         mock_pm.return_value = []
         mock_s2.return_value = []
 

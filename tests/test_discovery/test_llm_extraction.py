@@ -72,11 +72,11 @@ class TestValidateParam:
     def test_string_value(self):
         assert _validate_param({"name": "mu_max", "value": "fast"}) is False
 
-    def test_valid_pH(self):
-        assert _validate_param({"name": "pH_opt", "value": 6.5}) is True
+    def test_valid_K_I(self):
+        assert _validate_param({"name": "K_I", "value": 5.0}) is True
 
-    def test_pH_out_of_range(self):
-        assert _validate_param({"name": "pH_opt", "value": 15.0}) is False
+    def test_K_I_out_of_range(self):
+        assert _validate_param({"name": "K_I", "value": 600.0}) is False
 
     def test_valid_Yxs(self):
         assert _validate_param({"name": "Yxs", "value": 0.45}) is True
