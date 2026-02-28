@@ -41,6 +41,11 @@ def _extract_json(text: str) -> dict | None:
     - Leading/trailing text around the JSON
     - Trailing commas (common LLM mistake)
     """
+    # Strip thinking blocks (Qwen3.5 emits <think>...</think> by default)
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
+    # Also strip plain "Thinking Process:" preamble (non-tag variant)
+    text = re.sub(r"^Thinking Process:.*?(?=[\[{])", "", text, flags=re.DOTALL).strip()
+
     # Strip markdown fences
     text = re.sub(r"^```(?:json)?\s*", "", text.strip())
     text = re.sub(r"\s*```$", "", text.strip())
@@ -219,6 +224,7 @@ class LLMClient:
             ],
             "temperature": 0.1,
             "max_tokens": max(output_budget, 256),
+            "chat_template_kwargs": {"enable_thinking": False},
         }
 
         try:
